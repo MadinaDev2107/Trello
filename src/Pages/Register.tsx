@@ -49,7 +49,7 @@ const Register = () => {
   return (
     <div className="d-flex justify-content-center align-items-start  vh-100 bg-primary">
       <div
-        className="card p-3 w-100 text-center m-5"
+        className="card p-3 w-100 text-center m-2"
         style={{ maxWidth: "400px" }}
       >
         <div className="border-bottom border-2 mb-2">
