@@ -12,7 +12,6 @@ interface Task {
 }
 
 interface User {
-  id: string;
   name: string;
 }
 
@@ -25,7 +24,6 @@ const Admin: React.FC = () => {
     date: "",
   });
   const [users, setUsers] = useState<User[]>([]);
-  const token: string | null = localStorage.getItem("token");
 
   useEffect(() => {
     getUser();
@@ -58,8 +56,12 @@ const Admin: React.FC = () => {
   }
 
   return (
-    <div>
-      <div className="card p-3 w-25 mx-auto mt-3">
+    <div
+      className="container d-flex justify-content-center align-items-center"
+      style={{ minHeight: "100vh" }}
+    >
+      <div className="card p-3 w-50">
+        <h3 className="text-center mb-3">Create Task</h3>
         <input
           placeholder="Title..."
           type="text"
@@ -81,7 +83,7 @@ const Admin: React.FC = () => {
           type="date"
           onChange={(e) => setTask({ ...task, date: e.target.value })}
         />
-        <button onClick={save} className="btn btn-dark">
+        <button onClick={save} className="btn btn-dark w-100">
           Save
         </button>
       </div>
