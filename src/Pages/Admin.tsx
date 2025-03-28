@@ -59,41 +59,32 @@ const Admin: React.FC = () => {
 
   return (
     <div>
-      {token === "r4PgDiiE7sYJUYF5XcnjY6CYMFx1" ? (
-        <div className="card p-3 w-25 mx-auto mt-3">
-          <input
-            placeholder="Title..."
-            type="text"
-            className="form-control mb-2"
-            value={task.title}
-            onChange={(e) => setTask({ ...task, title: e.target.value })}
-          />
-          <Select
-            className="mb-2"
-            options={options}
-            onChange={(selectedOption) => {
-              setTask({ ...task, user: selectedOption?.value || "" });
-            }}
-          />
-          <input
-            min={today}
-            value={task.date}
-            className="form-control mb-2"
-            type="date"
-            onChange={(e) => setTask({ ...task, date: e.target.value })}
-          />
-          <button onClick={save} className="btn btn-dark">
-            Save
-          </button>
-        </div>
-      ) : (
-        <div
-          style={{ height: "450px" }}
-          className="d-flex justify-content-center align-items-center"
-        >
-          <h3 style={{ color: "grey" }}>404 | Page not found</h3>
-        </div>
-      )}
+      <div className="card p-3 w-25 mx-auto mt-3">
+        <input
+          placeholder="Title..."
+          type="text"
+          className="form-control mb-2"
+          value={task.title}
+          onChange={(e) => setTask({ ...task, title: e.target.value })}
+        />
+        <Select
+          className="mb-2"
+          options={options}
+          onChange={(selectedOption) => {
+            setTask({ ...task, user: selectedOption?.value || "" });
+          }}
+        />
+        <input
+          min={today}
+          value={task.date}
+          className="form-control mb-2"
+          type="date"
+          onChange={(e) => setTask({ ...task, date: e.target.value })}
+        />
+        <button onClick={save} className="btn btn-dark">
+          Save
+        </button>
+      </div>
     </div>
   );
 };
