@@ -59,11 +59,14 @@ const OrderManagement: React.FC = () => {
   }
 
   return (
-    <div className="container p-4">
+    <div className="bg-dark p-4  vh-100">
       {isLoading ? (
         <div className="d-flex justify-content-center">
           <button className="btn btn-primary" disabled>
-            <span className="spinner-border spinner-border-sm" role="status"></span>
+            <span
+              className="spinner-border spinner-border-sm"
+              role="status"
+            ></span>
             Loading...
           </button>
         </div>
@@ -71,33 +74,66 @@ const OrderManagement: React.FC = () => {
         <div className="d-flex flex-column flex-md-row justify-content-center gap-3">
           {[
             { title: "To-do", status: "to-do", color: "bg-danger" },
-            { title: "In Progress", status: "in-progress", color: "bg-warning" },
+            {
+              title: "In Progress",
+              status: "in-progress",
+              color: "bg-warning",
+            },
             { title: "Done", status: "done", color: "bg-success" },
           ].map((column, index) => (
-            <div key={index} className="flex-grow-1" style={{ minWidth: "250px" }}>
-              <h4 className="text-center">{column.title}</h4>
-              <div className={`order-section p-2 rounded ${column.color}`} style={{ maxHeight: "400px", overflowY: "auto" }}>
-                {tasks.filter(task => task.status === column.status).map((task, i) => (
-                  <div key={i} className="order-item p-2 mb-2 bg-white rounded shadow-sm d-flex justify-content-between align-items-center">
-                    <ul className="list-unstyled w-100">
-                      <li><strong>Task #{i + 1}</strong></li>
-                      <li><FaTasks /> {task.title}</li>
-                      <li><FaUserTie /> {task.user}</li>
-                      <li><FaRegClock /> {task.date}</li>
-                    </ul>
-                    <div>
-                      {column.status !== "to-do" && (
-                        <FaArrowLeft className="text-primary me-2" onClick={() => updateItems(task.id, task.status)} />
-                      )}
-                      {column.status !== "done" && (
-                        <FaArrowRight className="text-primary" onClick={() => updateItem(task.id, task.status)} />
-                      )}
-                      {column.status === "done" && (
-                        <FaTrash className="text-danger" onClick={() => delItem(task.id)} />
-                      )}
+            <div
+              key={index}
+              className="flex-grow-1"
+              style={{ minWidth: "250px" }}
+            >
+              <h4 className="text-light text-danger text-center">{column.title}</h4>
+              <div
+                className={` order-section p-2 rounded ${column.color}`}
+                style={{ maxHeight: "400px", overflowY: "auto" }}
+              >
+                {tasks
+                  .filter((task) => task.status === column.status)
+                  .map((task, i) => (
+                    <div
+                      key={i}
+                      className="order-item p-2 mb-2 bg-white rounded shadow-sm d-flex justify-content-between align-items-center"
+                    >
+                      <ul className="list-unstyled w-100">
+                        <li>
+                          <strong>Task #{i + 1}</strong>
+                        </li>
+                        <li>
+                          <FaTasks /> {task.title}
+                        </li>
+                        <li>
+                          <FaUserTie /> {task.user}
+                        </li>
+                        <li>
+                          <FaRegClock /> {task.date}
+                        </li>
+                      </ul>
+                      <div>
+                        {column.status !== "to-do" && (
+                          <FaArrowLeft
+                            className="text-primary me-2"
+                            onClick={() => updateItems(task.id, task.status)}
+                          />
+                        )}
+                        {column.status !== "done" && (
+                          <FaArrowRight
+                            className="text-primary"
+                            onClick={() => updateItem(task.id, task.status)}
+                          />
+                        )}
+                        {column.status === "done" && (
+                          <FaTrash
+                            className="text-danger"
+                            onClick={() => delItem(task.id)}
+                          />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           ))}

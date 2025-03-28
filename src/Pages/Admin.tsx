@@ -57,10 +57,10 @@ const Admin: React.FC = () => {
 
   return (
     <div
-      className="container d-flex justify-content-center align-items-center"
+      className="container d-flex bg-dark justify-content-center align-items-center"
       style={{ minHeight: "100vh" }}
     >
-      <div className="card p-3 w-50">
+      <div className="card p-3 w-100" style={{ maxWidth: "500px" }}>
         <h3 className="text-center mb-3">Create Task</h3>
         <input
           placeholder="Title..."
