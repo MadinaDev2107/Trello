@@ -37,209 +37,70 @@ const OrderManagement: React.FC = () => {
           ...data[key],
         }));
         setTasks(tasksArr);
-
-        console.log(tasksArr);
       } else {
         setTasks([]);
       }
+      setIsLoading(false);
     });
-    setIsLoading(false);
   }
 
   function delItem(id: string) {
-    const taskRef = ref(database, `tasks/${id}`);
-    remove(taskRef);
+    remove(ref(database, `tasks/${id}`));
   }
 
-  function updateItem(current: string, status: string) {
+  function updateItem(id: string, status: string) {
     const newStatus = status === "to-do" ? "in-progress" : "done";
-    update(ref(database, `tasks/${current}`), { ...tasks, status: newStatus });
+    update(ref(database, `tasks/${id}`), { status: newStatus });
   }
-  function updateItems(current: string, status: string) {
+
+  function updateItems(id: string, status: string) {
     const newStatus = status === "done" ? "in-progress" : "to-do";
-    update(ref(database, `tasks/${current}`), { ...tasks, status: newStatus });
+    update(ref(database, `tasks/${id}`), { status: newStatus });
   }
+
   return (
     <div className="container p-4">
       {isLoading ? (
-        <div className="d-flex justify-content-center gap-2">
-          <button
-            className="btn btn-primary d-flex justify-content-center align-items-center"
-            type="button"
-            disabled
-          >
-            <span
-              className="spinner-border spinner-border-sm m-1"
-              role="status"
-              aria-hidden="true"
-            ></span>
-            <span className="m-1">Loading...</span>
+        <div className="d-flex justify-content-center">
+          <button className="btn btn-primary" disabled>
+            <span className="spinner-border spinner-border-sm" role="status"></span>
+            Loading...
           </button>
         </div>
       ) : (
-        <div className="row">
-          <div className="col-md-4">
-            <h4 className="text-center">To-do</h4>
-            <div
-              style={{ maxHeight: "350px", overflow: "auto" }}
-              className="order-section bg-light p-1 rounded"
-            >
-              {tasks
-                .filter((task) => task.status === "to-do")
-                .map((task, index) => (
-                  <div
-                    key={index}
-                    className="order-item p-2 mb-2 bg-white rounded border"
-                  >
-                    <div className="d-flex justify-content-between align-items-center">
-                      <ul
-                        style={{ listStyle: "none" }}
-                        key={index}
-                        className="list-disc pl-5 space-y-1 w-100"
-                      >
-                        <li className="border p-1 rounded-lg shadow-md bg-white">
-                          <p className="text-lg font-semibold">
-                            Task #{index + 1}
-                          </p>
-                        </li>
-                        <li className="border p-1 rounded-lg shadow-md bg-white">
-                          <p className="flex items-center gap-2">
-                            <FaTasks /> {task.title}
-                          </p>
-                        </li>
-                        <li className="border p-1 rounded-lg shadow-md bg-white">
-                          <p className="flex items-center gap-2">
-                            <FaUserTie /> {task.user}
-                          </p>
-                        </li>
-                        <li className="border p-1 rounded-lg shadow-md bg-white">
-                          <p className="flex items-center gap-2">
-                            <FaRegClock /> {task.date}
-                          </p>
-                        </li>
-                      </ul>
-                      <div>
-                        <FaArrowRight
-                          className="text-primary"
-                          onClick={() => updateItem(task.id, task.status)}
-                        />
-                      </div>
+        <div className="d-flex flex-column flex-md-row justify-content-center gap-3">
+          {[
+            { title: "To-do", status: "to-do", color: "bg-danger" },
+            { title: "In Progress", status: "in-progress", color: "bg-warning" },
+            { title: "Done", status: "done", color: "bg-success" },
+          ].map((column, index) => (
+            <div key={index} className="flex-grow-1" style={{ minWidth: "250px" }}>
+              <h4 className="text-center">{column.title}</h4>
+              <div className={`order-section p-2 rounded ${column.color}`} style={{ maxHeight: "400px", overflowY: "auto" }}>
+                {tasks.filter(task => task.status === column.status).map((task, i) => (
+                  <div key={i} className="order-item p-2 mb-2 bg-white rounded shadow-sm d-flex justify-content-between align-items-center">
+                    <ul className="list-unstyled w-100">
+                      <li><strong>Task #{i + 1}</strong></li>
+                      <li><FaTasks /> {task.title}</li>
+                      <li><FaUserTie /> {task.user}</li>
+                      <li><FaRegClock /> {task.date}</li>
+                    </ul>
+                    <div>
+                      {column.status !== "to-do" && (
+                        <FaArrowLeft className="text-primary me-2" onClick={() => updateItems(task.id, task.status)} />
+                      )}
+                      {column.status !== "done" && (
+                        <FaArrowRight className="text-primary" onClick={() => updateItem(task.id, task.status)} />
+                      )}
+                      {column.status === "done" && (
+                        <FaTrash className="text-danger" onClick={() => delItem(task.id)} />
+                      )}
                     </div>
                   </div>
                 ))}
+              </div>
             </div>
-          </div>
-
-          <div className="col-md-4">
-            <h4 className="text-center">In Progress</h4>
-            <div
-              style={{ maxHeight: "350px", overflow: "auto" }}
-              className="order-section bg-light p-1 rounded"
-            >
-              {tasks
-                .filter((task) => task.status === "in-progress")
-                .map((task, index) => (
-                  <div
-                    key={index}
-                    className="order-item p-2 mb-2 bg-white rounded border"
-                  >
-                    <div className="d-flex justify-content-between align-items-center">
-                      <ul
-                        style={{ listStyle: "none" }}
-                        key={index}
-                        className="list-disc pl-5 space-y-1 w-100"
-                      >
-                        <li className="border p-1 rounded-lg shadow-md bg-white">
-                          <p className="text-lg font-semibold">
-                            Task #{index + 1}
-                          </p>
-                        </li>
-                        <li className="border p-1 rounded-lg shadow-md bg-white">
-                          <p className="flex items-center gap-2">
-                            <FaTasks /> {task.title}
-                          </p>
-                        </li>
-                        <li className="border p-1 rounded-lg shadow-md bg-white">
-                          <p className="flex items-center gap-2">
-                            <FaUserTie /> {task.user}
-                          </p>
-                        </li>
-                        <li className="border p-1 rounded-lg shadow-md bg-white">
-                          <p className="flex items-center gap-2">
-                            <FaRegClock /> {task.date}
-                          </p>
-                        </li>
-                      </ul>
-                      <div>
-                        <FaArrowLeft
-                          className="text-primary"
-                          onClick={() => updateItems(task.id, task.status)}
-                        />
-                        <FaArrowRight
-                          className="text-primary"
-                          onClick={() => updateItem(task.id, task.status)}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-            </div>
-          </div>
-          <div className="col-md-4">
-            <h4 className="text-center">Done</h4>
-            <div
-              style={{ maxHeight: "350px", overflow: "auto" }}
-              className="order-section bg-light p-1 rounded"
-            >
-              {tasks
-                .filter((task) => task.status === "done")
-                .map((task, index) => (
-                  <div
-                    key={index}
-                    className="order-item p-2 mb-2 bg-white rounded border"
-                  >
-                    <div className="d-flex justify-content-between align-items-center">
-                      <ul
-                        style={{ listStyle: "none" }}
-                        key={index}
-                        className="list-disc pl-5 space-y-1 w-100"
-                      >
-                        <li className="border p-1 rounded-lg shadow-md bg-white">
-                          <p className="text-lg font-semibold">
-                            Task #{index + 1}
-                          </p>
-                        </li>
-                        <li className="border p-1 rounded-lg shadow-md bg-white">
-                          <p className="flex items-center gap-2">
-                            <FaTasks /> {task.title}
-                          </p>
-                        </li>
-                        <li className="border p-1 rounded-lg shadow-md bg-white">
-                          <p className="flex items-center gap-2">
-                            <FaUserTie /> {task.user}
-                          </p>
-                        </li>
-                        <li className="border p-1 rounded-lg shadow-md bg-white">
-                          <p className="flex items-center gap-2">
-                            <FaRegClock /> {task.date}
-                          </p>
-                        </li>
-                      </ul>
-                      <div>
-                        <FaTrash
-                          className="text-danger me-2"
-                          onClick={() => delItem(task.id)}
-                        />
-                        <FaArrowLeft
-                          className="text-primary"
-                          onClick={() => updateItems(task.id, task.status)}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-            </div>
-          </div>
+          ))}
         </div>
       )}
     </div>

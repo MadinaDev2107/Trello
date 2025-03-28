@@ -2,7 +2,7 @@ import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, database } from "../utils/firebase.config";
 import { ref, get } from "firebase/database";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
@@ -52,11 +52,8 @@ const Login = () => {
   }
 
   return (
-    <div
-      className="d-flex justify-content-center align-items-center "
-      style={{ backgroundColor: "#007bff", height: "488px" }}
-    >
-      <div className="card p-3 w-25 text-center">
+    <div className="d-flex justify-content-center align-items-center vh-100 bg-primary">
+      <div className="card p-3 w-100 text-center" style={{ maxWidth: "400px" }}>
         <div className="border-bottom border-2 mb-2">
           <h2>Login</h2>
         </div>
@@ -82,9 +79,12 @@ const Login = () => {
             {showPassword ? <Eye /> : <EyeOff />}
           </button>
         </div>
-        <button onClick={login} className="btn btn-dark">
+        <button onClick={login} className="btn btn-dark w-100">
           Login
         </button>
+        <Link to={"/sign-up"} className="d-block mt-2">
+        Don't have an account?
+        </Link>
       </div>
     </div>
   );

@@ -34,7 +34,7 @@ const Register = () => {
 
     createUserWithEmailAndPassword(auth, user.email, user.password)
       .then((res) => {
-        addDoc(collection(db, "users"), user)
+        addDoc(collection(db, "users"), user);
         const userId = res.user.uid;
         set(ref(database, `users/${userId}`), {
           name: user.name,
@@ -47,11 +47,8 @@ const Register = () => {
   }
 
   return (
-    <div
-      className="d-flex justify-content-center align-items-center "
-      style={{ backgroundColor: "#007bff", height:"488px" }}
-    >
-      <div className="card p-3 w-25 text-center">
+    <div className="d-flex justify-content-center align-items-center vh-100 bg-primary">
+      <div className="card p-3 w-100 text-center" style={{ maxWidth: "400px" }}>
         <div className="border-bottom border-2 mb-2">
           <h2>Register</h2>
         </div>
@@ -83,10 +80,12 @@ const Register = () => {
             {showPassword ? <Eye /> : <EyeOff />}
           </button>
         </div>
-        <button onClick={register} className="btn btn-dark">
+        <button onClick={register} className="btn btn-dark w-100">
           Save
         </button>
-        <Link to={"/sign-in"}>Already have account?</Link>
+        <Link to={"/sign-in"} className="d-block mt-2">
+          Already have account?
+        </Link>
       </div>
     </div>
   );
